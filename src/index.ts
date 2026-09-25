@@ -1,29 +1,31 @@
-
-import { PrismaClient } from "@prisma/client";
+import "dotenv/config";
+import client from "./db.js";
 import express from "express";
 
 const app = express();
 app.use(express.json());
 
-const client = new PrismaClient();
+app.get("/", async (req, res) => {
+  const data = await client.user.findMany();
 
-app.get("/", (req, res) => {
-    res.json({
-        message: "Healthy server"
-    })
-})
+  res.json({
+    message: "Healthy server",
+    data: JSON.stringify(data),
+  });
+});
 
 app.post("/", async (req, res) => {
-    await client.user.create({
-        data: {
-            email: req.body.email,
-            name: req.body.name
-        }
-    })
+  await client.user.create({
+    data: {
+      email: req.body.email,
+      username: req.body.username,
+      password: req.body.password,
+    },
+  });
 
-    res.json({
-        message: "Done signing up!"
-    })
-})
+  res.json({
+    message: "Done signing up!",
+  });
+});
 
 app.listen(3000);
