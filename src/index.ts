@@ -8,9 +8,11 @@ app.use(express.json());
 app.get("/", async (req, res) => {
   const data = await client.user.findMany();
 
+console.log("server check")
+
   res.json({
     message: "Healthy server",
-    data: JSON.stringify(data),
+    data:data,
   });
 });
 
