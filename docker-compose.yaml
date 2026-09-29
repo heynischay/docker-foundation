@@ -1,0 +1,28 @@
+version: "2.23"
+
+services:
+  database:
+    image: postgres
+    container_name: my_database
+    
+    environment:
+        - POSTGRES_HOST_AUTH_METHOD=trust
+        
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/18/docker
+
+  backend:
+    image: backend
+    container_name: my_backend
+    ports:
+      - "3000:3000"
+    depends_on:
+        - database
+
+    environment:
+      - DATABASE_URL=postgresql://postgres@database:5432/postgres
+
+volumes: 
+ postgres_data:
